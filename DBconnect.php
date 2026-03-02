@@ -20,25 +20,20 @@ class DBConnect
     public function getPDO(): PDO
     {
         // On vérifie si on est déjà connecté pour ne pas recréer de connexion
-        if ($this->pdo === null) {
-            try {
-                // DSN (Data Source Name) : la chaîne de configuration
-                $dsn = "mysql:host={$this->host};port={$this->port};dbname={$this->dbName};charset={$this->charset}";
+        if ($this->pdo === null) 
+        {
+            // DSN (Data Source Name) : la chaîne de configuration
+            $dsn = "mysql:host={$this->host};port={$this->port};dbname={$this->dbName};charset={$this->charset}";
 
-                // Options de sécurité et de débogage
-                $options = [
-                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, // Lance une exception en cas d'erreur SQL
-                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, // Récupère les données sous forme de tableau associatif
-                    PDO::ATTR_EMULATE_PREPARES => false, // Utilise les vraies requêtes préparées de MySQL
-                ];
+            // Options de sécurité et de débogage
+            $options = [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, // Lance une exception en cas d'erreur SQL
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, // Récupère les données sous forme de tableau associatif
+                PDO::ATTR_EMULATE_PREPARES => false, // Utilise les vraies requêtes préparées de MySQL
+            ];
 
-                $this->pdo = new PDO($dsn, $this->user, $this->password, $options);
-                // echo "CONNEXION DB\n";
+            $this->pdo = new PDO($dsn, $this->user, $this->password, $options);
                 
-            } catch (PDOException $e) {
-                // En cas d'erreur, on arrête le script proprement
-                die("Erreur de connexion à la base de données : " . $e->getMessage());
-            }
         }
 
         return $this->pdo;
