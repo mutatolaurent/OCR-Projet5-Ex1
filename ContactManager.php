@@ -101,3 +101,5 @@ class ContactManager
     public function modifyById (int $id): bool {
         // TODO
     }
+
+}
