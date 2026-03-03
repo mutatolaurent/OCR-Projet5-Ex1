@@ -70,10 +70,10 @@ class ContactManager
     public function insertNew (Contact $contact): int|false
     {
         // Préparation de la requête d'insertion du nouveau contact
-        $req = $this->pdo->prepare('INSERT INTO contact (name, email, phone_number) VALUES (:name, :email, :phone_number)');
+        $reqInsert = $this->pdo->prepare('INSERT INTO contact (name, email, phone_number) VALUES (:name, :email, :phone_number)');
 
         // Exécution de la requête d'insertion
-        $success =   $req->execute([
+        $success =   $reqInsert->execute([
             'name'  => $contact->getName(),
             'email' => $contact->getEmail(),
             'phone_number' => $contact->getPhoneNumber()
@@ -94,12 +94,38 @@ class ContactManager
         
     }
     
-    public function deleteById (int $id): bool {
-        // TODO
+    /**
+     * Supprime un contact par son ID.
+     * @param int $id
+     * @return int Nombre de lignes supprimées
+     */
+    public function deleteById (int $id): int {
+        
+        // Préparation de la requête de suppression du contact    
+        $reqDelete = $this->pdo->prepare("DELETE FROM contact WHERE id = :id");
+        
+        // Exécution de la requête de suppression
+        $reqDelete->execute(['id' => $id]);
+
+        // rowCount() permet de savoir si MySQL a réellement trouvé et supprimé une ligne
+        return $reqDelete->rowCount();
     }
 
-    public function modifyById (int $id): bool {
-        // TODO
+    public function modifyById (Contact $contact): int {
+
+        $reqUpdate = $this->pdo->prepare("UPDATE contact 
+                SET name = :name, email = :email, phone_number = :phone_number 
+                WHERE id = :id");
+        
+        $reqUpdate->execute([
+            'id'    => $contact->getId(),
+            'name'  => $contact->getName(),
+            'email' => $contact->getEmail(),
+            'phone_number' => $contact->getPhoneNumber()
+        ]);
+
+        // Retourne le nombre de lignes modifiées
+        return $reqUpdate->rowCount();
     }
 
 }

@@ -31,7 +31,7 @@ class Command
             }
 
         } catch (Exception $e) {
-            echo "[Command->list] Une erreur est survenue sur une requête BD: " . $e->getMessage(). PHP_EOL;
+            echo "[Command->list] Une erreur est survenue sur une requête BD: " . $e->getMessage(). PHP_EOL. PHP_EOL;
         }
     }
 
@@ -49,11 +49,11 @@ class Command
             if ($contact) {
                 echo $contact . PHP_EOL;
             } else {
-                echo "Désolé ! Aucun contact trouvé avec l'ID $id." . PHP_EOL;
+                echo "Désolé ! Aucun contact trouvé avec l'ID $id." . PHP_EOL. PHP_EOL;
             }   
 
         } catch (Exception $e) {
-            echo "[Command->detail] Une erreur est survenue sur une requête BD: " . $e->getMessage(). PHP_EOL;
+            echo "[Command->detail] Une erreur est survenue sur une requête BD: " . $e->getMessage(). PHP_EOL. PHP_EOL;
         }
     }
 
@@ -80,17 +80,17 @@ class Command
 
                 // On affiche les détails du contact comme confirmation que l'opération s'est bien passée
                 if ($contact) {
-                    echo "Nouveau contact créé : ".$contact . PHP_EOL;
+                    echo "Nouveau contact créé : ".$contact . PHP_EOL. PHP_EOL;
                 } else {
-                    echo "[Command->create] Echec confirmation création de contact avec l'ID:".$id. PHP_EOL;
+                    echo "[Command->create] Echec confirmation création de contact avec l'ID:".$id. PHP_EOL. PHP_EOL;
                 } 
 
             } else {
-                echo "[Command->create] Echec de l'insertion d'un nouveau contact". PHP_EOL;
+                echo "[Command->create] Echec de l'insertion d'un nouveau contact". PHP_EOL. PHP_EOL;
             }
 
         } catch (Exception $e) {
-            echo "[Command->create] Une erreur est survenue sur une requête BD: " . $e->getMessage();
+            echo "[Command->create] Une erreur est survenue sur une requête BD: " . $e->getMessage(). PHP_EOL. PHP_EOL;
         }
 
     }
@@ -102,43 +102,56 @@ class Command
             // On crée le manager en lui injectant la connexion
             $contactManager = new ContactManager($this->pdo);
 
-            // 3. On récupère les contacts
-            $success = $contactManager->deleteById($id);
+            // On récupère les contacts
+            $count = $contactManager->deleteById($id);
 
-            // On affiche les détails du contact
-            if ($success) {
-                echo "Ce contact a bien été supprimé !" . PHP_EOL;
+            // On affiche le CR de la suppression
+            if ($count > 0) {
+                echo "Le contact $id a bien été supprimé !" . PHP_EOL. PHP_EOL;
             } else {
-                echo "Désolé ! Aucun contact trouvé avec l'ID $id." . PHP_EOL;
+                echo "Désolé ! Aucun contact trouvé avec l'ID $id." . PHP_EOL. PHP_EOL;
             }   
 
         } catch (Exception $e) {
-            echo "[Command->delete] Une erreur est survenue sur une requête BD: " . $e->getMessage(). PHP_EOL;
+            echo "[Command->delete] Une erreur est survenue sur une requête BD: " . $e->getMessage(). PHP_EOL. PHP_EOL;
         }
     }
 
-    public function modify($id): void 
+    public function modify(Contact $contact): void 
     {
         try {
 
             // On crée le manager en lui injectant la connexion
             $contactManager = new ContactManager($this->pdo);
 
-            // 3. On récupère les contacts
-            $success = $contactManager->modifyById($id);
+            echo "ID modify =". $contact->getId().PHP_EOL. PHP_EOL;
 
-            // On affiche les détails du contact modifié
-            if ($success) {
-                // TODO
+            // On modifie les informations du contact
+            $count = $contactManager->modifyById($contact);
+
+            echo "Count modify = $count".PHP_EOL. PHP_EOL;
+
+            // On confirme que la modification a bien fonctionné 
+            // en récupérant les informations du contact directement en BD
+            if ($count > 0) {
+
+                // On récupère en BD le contact à partir de son ID
+                $contactModified = $contactManager->findById($contact->getId());
+
+                // On affiche les détails du contact comme confirmation que l'opération s'est bien passée
+                if ($contactModified) {
+                    echo "Contact modifié avec succès : ".$contactModified . PHP_EOL. PHP_EOL;
+                } else {
+                    echo "[Command->modify] Echec confirmation modification de contact avec l'ID:".$contact->getId(). PHP_EOL. PHP_EOL;
+                } 
             } else {
-                // TODO
+                echo "[Command->modify] Echec de modification du contact".$contact->getId(). PHP_EOL. PHP_EOL;
             }   
 
         } catch (Exception $e) {
-            echo "[Command->modify] Une erreur est survenue sur une requête BD: " . $e->getMessage(). PHP_EOL;
+            echo "[Command->modify] Une erreur est survenue sur une requête BD: " . $e->getMessage(). PHP_EOL. PHP_EOL;
         }
     }
-
 
     public function help (): void
     {
