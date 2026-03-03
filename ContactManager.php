@@ -1,14 +1,21 @@
 <?php
 
+/**
+ * Classe ContactManager
+ * * Assure la persistance des données entre les objets de la classe Contact 
+ * et la table 'contact' de la base de données via PDO.
+ */
 class ContactManager
 {
+    /**
+     * @var PDO Instance de connexion à la base de données.
+     */
     private PDO $pdo;
 
     /**
-     * On passe l'objet PDO au constructeur
-     * @param PDO $pdo L'objet PDO connecté à la DB
-     * @return ContactManager Retourne l'objet ContactManager
-     */ 
+     * Constructeur du Manager.
+     * * @param PDO $pdo L'objet PDO connecté à la base de données.
+     */
     public function __construct(PDO $pdo)
     {
         $this->pdo = $pdo;
@@ -17,6 +24,10 @@ class ContactManager
     /**
      * On récupère tous les contacts de la base de données
      * @return array Tableau d'objets de la classe Contact
+     */
+    /**
+     * Récupère la liste exhaustive des contacts présents en base de données.
+     * * @return Array of Contact Tableau d'objets de la classe Contact.
      */
     public function findAll(): array
     {
@@ -35,9 +46,9 @@ class ContactManager
     }
 
     /**
-     * Recherche un contact par son ID
-     * @param int $id L'identifiant du contact
-     * @return Contact|null Retourne l'objet Contact ou null si non trouvé
+     * Recherche un contact spécifique par son identifiant unique.
+     * * @param int $id L'identifiant du contact recherché.
+     * @return Contact|null L'objet Contact correspondant ou null si aucun enregistrement n'existe.
      */
     public function findById(int $id): ?Contact
     {
@@ -63,10 +74,10 @@ class ContactManager
     }
 
     /**
-     * Insère un nouveau contact et retourne son nouvel ID
-     * @param Contact $contact Objet avec les infos du nouveau contact
-     * @return int|false L'ID généré ou false si l'insertion a échoué
-    */
+     * Insère un nouveau contact dans la base de données.
+     * * @param Contact $contact L'objet Contact contenant les informations à enregistrer.
+     * @return int|false Le nouvel ID généré par la base de données ou false en cas d'échec.
+     */
     public function insertNew (Contact $contact): int|false
     {
         // Préparation de la requête d'insertion du nouveau contact
@@ -95,9 +106,9 @@ class ContactManager
     }
     
     /**
-     * Supprime un contact par son ID.
-     * @param int $id
-     * @return int Nombre de lignes supprimées
+     * Supprime définitivement un contact de la base de données.
+     * * @param int $id L'identifiant du contact à supprimer.
+     * @return int Le nombre de lignes supprimées (1 en cas de succès, 0 si l'ID n'existait pas).
      */
     public function deleteById (int $id): int {
         
@@ -111,6 +122,11 @@ class ContactManager
         return $reqDelete->rowCount();
     }
 
+    /**
+     * Met à jour les informations d'un contact existant.
+     * * @param Contact $contact L'objet Contact contenant l'ID et les nouvelles valeurs.
+     * @return int Le nombre de lignes modifiées (0 si aucune donnée n'a changé ou ID inconnu).
+     */
     public function modifyById (Contact $contact): int {
 
         $reqUpdate = $this->pdo->prepare("UPDATE contact 

@@ -1,9 +1,17 @@
 <?php
 
+/**
+ * Classe InputCheck
+ * Fournit des outils statiques pour analyser, nettoyer et valider 
+ * les entrées utilisateur provenant de l'interface en ligne de commande.
+ */
 class InputCheck
 {
     /**
-     * Analyse la ligne tapée pour séparer la commande des arguments.
+     * Analyse la ligne de commande brute pour extraire l'action et ses arguments.
+     *
+     * @param string $line La ligne saisie par l'utilisateur.
+     * @return array|null Retourne un tableau ['command', 'args'] ou null si le format est invalide.
      */
     public static function parseCommand(string $line): ?array
     {
@@ -22,9 +30,13 @@ class InputCheck
 
     /**
      * Valide le format d'une adresse email.
-     * Retourne l'email nettoyé ou False
+     *
+     * @param string $email   L'adresse email à vérifier.
+     * @param string $command Le nom de la commande (pour le message d'erreur).
+     * @return string         L'email nettoyé.
+     * @throws Exception      Si l'adresse email est syntaxiquement incorrecte.
      */
-    public static function validateEmail(string $email, string $command): string|false
+    public static function validateEmail(string $email, string $command): string
     {
         $email = trim($email);    
     
@@ -37,7 +49,15 @@ class InputCheck
         return $email;
     }
 
-    public static function validateFrenchPhone(string $phone_number, string $command): string|false
+    /**
+     * Valide et normalise un numéro de téléphone au format français.
+     *
+     * @param string $phone_number Le numéro brut (avec espaces, points ou tirets).
+     * @param string $command      Le nom de la commande (pour le message d'erreur).
+     * @return string              Le numéro de téléphone composé uniquement de 10 chiffres.
+     * @throws Exception           Si le format ne correspond pas à un numéro français.
+     */
+    public static function validateFrenchPhone(string $phone_number, string $command): string
     {
         $phone_number = trim($phone_number);
         
@@ -55,10 +75,12 @@ class InputCheck
     }
 
     /**
-     * Analyse les arguments de la commande 'create'.
-     * Vérifie si le format de l'email est valide
-     * Vérifie si le format du numéro de téléphone est valide
-     * Retourne un tableau avec les données nettoyée.
+     * Découpe et valide les arguments spécifiques à la création d'un contact.
+     *
+     * @param string $args    La chaîne d'arguments (Nom, Email, Tel).
+     * @param string $command Le nom de la commande appelante.
+     * @return array          Tableau associatif des données nettoyées ['name', 'email', 'phone_number'].
+     * @throws Exception      Si le nombre de paramètres est incorrect ou si les données sont invalides.
      */
     public static function parseAndValidateCreate(string $args, string $command): array
     {
@@ -78,7 +100,12 @@ class InputCheck
     }
 
     /**
-     * Vérifie si l'argument est un ID numérique.
+     * Valide qu'une chaîne représente un identifiant numérique entier.
+     *
+     * @param string $args    La chaîne contenant l'ID.
+     * @param string $command Le nom de la commande appelante.
+     * @return int            L'identifiant converti en entier.
+     * @throws Exception      Si l'argument n'est pas un nombre entier positif.
      */
     public static function parseId(string $args, string $command): int
     {
@@ -89,11 +116,12 @@ class InputCheck
     }
 
     /**
-     * Analyse les arguments de la commande 'modify'.
-     * Vérifie si le premier argument est bien un entier
-     * Vérifie si le format de l'email est valide
-     * Vérifie si le format du numéro de téléphone est valide
-     * Retourne un tableau avec les données nettoyée.
+     * Découpe et valide les arguments spécifiques à la modification d'un contact.
+     *
+     * @param string $args    La chaîne d'arguments (Id, Nom, Email, Tel).
+     * @param string $command Le nom de la commande appelante.
+     * @return array          Tableau associatif ['id', 'name', 'email', 'phone_number'].
+     * @throws Exception      Si le format global ou l'une des données est invalide.
      */
     public static function parseAndValidateModify(string $args, string $command): array
     {

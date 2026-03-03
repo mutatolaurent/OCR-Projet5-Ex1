@@ -30,7 +30,7 @@ $cde = new Command($pdo);
 while (true) {
 
     // On attend la saisie d'une commande au clavier
-    $line = readline("Entrez votre commande (help, list, detail, create, delete, quit) : ");
+    $line = readline("Entrez votre commande (help, list, detail, create, modify, delete, quit) : ");
 
     // On vérifie que le format de commande est conforme à celui attendu
     $input = InputCheck::parseCommand($line);

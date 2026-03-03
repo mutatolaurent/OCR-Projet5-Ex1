@@ -1,0 +1,20 @@
+create KO
+create jean jean@gmail.fr 0676543212
+create jean, jean@gmail.fr
+create jean, jean@gmailfr, 0676543212
+create jean, jean@gmail.fr, 06765432
+
+create OK
+create jean, jean@gmail.fr, 0676543201
+create pierre dupont, pierred@gmail.fr, 0676543201
+
+modify KO
+modify abc, pierre dupont, pierred@gmail.fr, 0676543201
+modify 987, pierre dupont, pierred@gmail.fr, 0676543201 KO
+modify 12, albert einstein, aeinstein@gamailfr, 0676543201
+modify 12, albert einstein, aeinstein@gamail.fr, 06765432
+
+modify OK
+modify 12, albert einstein, aeinstein@gamail.fr, 0676543201
+
+

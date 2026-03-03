@@ -1,22 +1,36 @@
 <?php
 
+/**
+ * Classe Command
+ * Cette classe fait office de Contrôleur pour l'application CLI.
+ * Elle reçoit les données validées, sollicite le ContactManager pour les opérations 
+ * en base de données et gère l'affichage des résultats à l'utilisateur.
+ */
 class Command 
 {
+    /**
+     * @var PDO Instance de connexion à la base de données.
+     */
     private PDO $pdo;
 
-    // On passe l'objet PDO au constructeur (Injection de dépendance)
+    /**
+     * Constructeur de la classe Command.
+     * Utilise l'injection de dépendance pour récupérer la connexion PDO.
+     *
+     * @param PDO $pdo Connexion active à la base de données.
+     */
     public function __construct(PDO $pdo)
     {
         $this->pdo = $pdo;
     }
 
+    /**
+     * Affiche la liste de tous les contacts enregistrés.
+     * @return void
+     */
     public function list(): void 
     {
         try {
-
-            // 1. On initialise la connexion
-            // $connection = new DBConnect();
-            // $pdo = $connection->getPDO();
 
             // 2. On crée le manager en lui injectant la connexion
             $contactManager = new ContactManager($this->pdo);
@@ -35,7 +49,12 @@ class Command
         }
     }
 
-    public function detail($id): void 
+    /**
+     * Affiche les détails d'un contact spécifique par son identifiant.
+     * @param int $id L'identifiant du contact à rechercher.
+     * @return void
+     */
+    public function detail(int $id): void 
     {
         try {
 
@@ -47,9 +66,9 @@ class Command
 
             // On affiche les détails du contact
             if ($contact) {
-                echo $contact . PHP_EOL;
+                echo PHP_EOL.$contact . PHP_EOL. PHP_EOL;
             } else {
-                echo "Désolé ! Aucun contact trouvé avec l'ID $id." . PHP_EOL. PHP_EOL;
+                echo PHP_EOL."Désolé ! Aucun contact trouvé avec l'ID $id." . PHP_EOL. PHP_EOL;
             }   
 
         } catch (Exception $e) {
@@ -58,13 +77,15 @@ class Command
     }
 
     /**
-     * Crée un nouveau contact
-     * @param ContactNew $contact Objet avec les infos du nouveau contact
-    */
+     * Crée un nouveau contact dans la base de données.
+     * * Après l'insertion, effectue une nouvelle requête pour confirmer 
+     * l'existence du contact créé.
+     * * @param Contact $contactNew L'objet Contact contenant les données à insérer.
+     * @return void
+     */
     public function create (Contact $contactNew): void
     {
         try {
-            // echo $contactNew . PHP_EOL;
 
             // On crée le manager en lui injectant la connexion
             $contactManager = new ContactManager($this->pdo);
@@ -95,7 +116,12 @@ class Command
 
     }
 
-    public function delete($id): void 
+    /**
+     * Supprime un contact de la base de données par son identifiant.
+     * * @param int $id L'identifiant du contact à supprimer.
+     * @return void
+     */
+    public function delete(int $id): void 
     {
         try {
 
@@ -107,7 +133,7 @@ class Command
 
             // On affiche le CR de la suppression
             if ($count > 0) {
-                echo "Le contact $id a bien été supprimé !" . PHP_EOL. PHP_EOL;
+                echo PHP_EOL."Le contact $id a bien été supprimé !" . PHP_EOL. PHP_EOL;
             } else {
                 echo "Désolé ! Aucun contact trouvé avec l'ID $id." . PHP_EOL. PHP_EOL;
             }   
@@ -117,6 +143,11 @@ class Command
         }
     }
 
+    /**
+     * Modifie les informations d'un contact existant.
+     * * @param Contact $contact L'objet Contact contenant l'ID et les nouvelles informations.
+     * @return void
+     */
     public function modify(Contact $contact): void 
     {
         try {
@@ -153,12 +184,17 @@ class Command
         }
     }
 
+    /**
+     * Affiche l'aide utilisateur listant les commandes disponibles et leur syntaxe.
+     * * @return void
+     */
     public function help (): void
     {
         echo 
-        "help : affiche cette aide\n\n".
+        "\nhelp : affiche cette aide\n\n".
         "list : liste les contacts\n\n".
         "create [name], [email], [phone number] : crée un contact\n\n".
+        "modify [id], [name], [email], [phone number] : modifie un contact\n\n".
         "delete [id] : supprime un contact\n\n".
         "quit : quitte le programme\n\n";
     }
