@@ -12,14 +12,28 @@ class ContactManager
      */
     private PDO $pdo;
 
+    // ------------ OLD VERSION : AVEC INJECTION DE DEPENDANCE DE LA CONNEXION PDO ------------
     /**
      * Constructeur du Manager.
      * * @param PDO $pdo L'objet PDO connecté à la base de données.
      */
-    public function __construct(PDO $pdo)
+    // public function __construct(PDO $pdo)
+    // {
+    //     $this->pdo = $pdo;
+    // }
+
+    // ------------ NEW VERSION : SANS INJECTION DE DEPENDANCE, LE MANAGER GERE LUI-MEME SA CONNEXION ------------
+    /**
+     * Constructeur du Manager.
+     * On initialise la connexion à la base de données en interne, sans injection de dépendance.
+     */
+    public function __construct()
     {
-        $this->pdo = $pdo;
+        // On initialise la connexion DB
+        $connection = new DBConnect();
+        $this->pdo = $connection->getPDO();
     }
+
 
     /**
      * On récupère tous les contacts de la base de données

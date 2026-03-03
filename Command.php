@@ -8,20 +8,33 @@
  */
 class Command 
 {
-    /**
-     * @var PDO Instance de connexion à la base de données.
-     */
-    private PDO $pdo;
-
+    
+    // ------------ OLD VERSION : AVEC INJECTION DE DEPENDANCE DE LA CONNEXION PDO ------------
     /**
      * Constructeur de la classe Command.
      * Utilise l'injection de dépendance pour récupérer la connexion PDO.
      *
      * @param PDO $pdo Connexion active à la base de données.
      */
-    public function __construct(PDO $pdo)
+    // public function __construct(PDO $pdo)
+    // {
+    //     $this->pdo = $pdo;
+    // }
+
+    // ------------ NEW VERSION : SANS INJECTION DE DEPENDANCE, LE MANAGER GERE LUI-MEME SA CONNEXION ------------
+    /**
+     * @var ContactManager Instance du manager de contacts pour les opérations CRUD.
+     */
+    // private PDO $pdo;
+    private ContactManager $contactManager;
+
+    /**
+     * Constructeur de la classe Command.
+     * Instancie un objet ContactManager en interne, qui gère lui-même sa propre connexion à la base de données.
+     */
+    public function __construct()
     {
-        $this->pdo = $pdo;
+        $this->contactManager = new ContactManager();
     }
 
     /**
@@ -33,10 +46,10 @@ class Command
         try {
 
             // 2. On crée le manager en lui injectant la connexion
-            $contactManager = new ContactManager($this->pdo);
+            // $contactManager = new ContactManager($this->pdo);
 
-            // 3. On récupère les contacts
-            $contacts = $contactManager->findAll();
+            // On récupère les contacts
+            $contacts = $this->contactManager->findAll();
 
             foreach ($contacts as $contact) {
                 // Comme $contact est un objet, et qu'on a __toString(), 
@@ -59,10 +72,10 @@ class Command
         try {
 
             // On crée le manager en lui injectant la connexion
-            $contactManager = new ContactManager($this->pdo);
+            // $contactManager = new ContactManager($this->pdo);
 
             // 3. On récupère les contacts
-            $contact = $contactManager->findById($id);
+            $contact = $this->contactManager->findById($id);
 
             // On affiche les détails du contact
             if ($contact) {
@@ -88,16 +101,16 @@ class Command
         try {
 
             // On crée le manager en lui injectant la connexion
-            $contactManager = new ContactManager($this->pdo);
+            // $contactManager = new ContactManager($this->pdo);
 
             // On demande au manager d'insérer le nouveau contact en BD et de retourner son ID
-            $id = $contactManager->insertNew($contactNew);
+            $id = $this->contactManager->insertNew($contactNew);
 
             // Si l'insertion à réussie, on récupère le contact créé à partir de son ID
             if ($id) {
 
                 // On récupère en BD le contact à partir de son ID
-                $contact = $contactManager->findById($id);
+                $contact = $this->contactManager->findById($id);
 
                 // On affiche les détails du contact comme confirmation que l'opération s'est bien passée
                 if ($contact) {
@@ -126,10 +139,10 @@ class Command
         try {
 
             // On crée le manager en lui injectant la connexion
-            $contactManager = new ContactManager($this->pdo);
+            // $contactManager = new ContactManager($this->pdo);
 
             // On récupère les contacts
-            $count = $contactManager->deleteById($id);
+            $count = $this->contactManager->deleteById($id);
 
             // On affiche le CR de la suppression
             if ($count > 0) {
@@ -153,34 +166,34 @@ class Command
         try {
 
             // On crée le manager en lui injectant la connexion
-            $contactManager = new ContactManager($this->pdo);
+            // $contactManager = new ContactManager($this->pdo);
 
-            echo "ID modify =". $contact->getId().PHP_EOL. PHP_EOL;
+            // echo "ID modify =". $contact->getId().PHP_EOL. PHP_EOL;
 
             // On modifie les informations du contact
-            $count = $contactManager->modifyById($contact);
+            $count = $this->contactManager->modifyById($contact);
 
-            echo "Count modify = $count".PHP_EOL. PHP_EOL;
+            // echo "Count modify = $count".PHP_EOL. PHP_EOL;
 
             // On confirme que la modification a bien fonctionné 
             // en récupérant les informations du contact directement en BD
             if ($count > 0) {
 
                 // On récupère en BD le contact à partir de son ID
-                $contactModified = $contactManager->findById($contact->getId());
+                $contactModified = $this->contactManager->findById($contact->getId());
 
                 // On affiche les détails du contact comme confirmation que l'opération s'est bien passée
                 if ($contactModified) {
-                    echo "Contact modifié avec succès : ".$contactModified . PHP_EOL. PHP_EOL;
+                    echo PHP_EOL."Contact modifié avec succès : ".$contactModified . PHP_EOL. PHP_EOL;
                 } else {
-                    echo "[Command->modify] Echec confirmation modification de contact avec l'ID:".$contact->getId(). PHP_EOL. PHP_EOL;
+                    echo PHP_EOL."[Command->modify] Echec confirmation modification de contact avec l'ID:".$contact->getId(). PHP_EOL. PHP_EOL;
                 } 
             } else {
-                echo "[Command->modify] Echec de modification du contact".$contact->getId(). PHP_EOL. PHP_EOL;
+                echo PHP_EOL."[Command->modify] Echec modification ou aucun contact trouvé avec cet ID ".$contact->getId(). PHP_EOL. PHP_EOL;
             }   
 
         } catch (Exception $e) {
-            echo "[Command->modify] Une erreur est survenue sur une requête BD: " . $e->getMessage(). PHP_EOL. PHP_EOL;
+            echo PHP_EOL."[Command->modify] Une erreur est survenue sur une requête BD: " . $e->getMessage(). PHP_EOL. PHP_EOL;
         }
     }
 

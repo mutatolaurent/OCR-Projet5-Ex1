@@ -15,16 +15,25 @@ require_once ('ContactManager.php');
 // Inclusion code classe Command
 require_once ('Command.php');
 
-try {
-    // On initialise la connexion DB
-    $connection = new DBConnect();
-    $pdo = $connection->getPDO();
-} catch (Exception $e) {
-    die ("Une erreur est survenue lors de la connexion à la DB : " . $e->getMessage());
-}
+// -------- Old Version
+// try {
+//     // On initialise la connexion DB
+//     $connection = new DBConnect();
+//     $pdo = $connection->getPDO();
+// } catch (Exception $e) {
+//     die ("Une erreur est survenue lors de la connexion à la DB : " . $e->getMessage());
+// }
 
 // On initialise l'objet Command chargé d'exécuter les commandes de l'utilisateur
-$cde = new Command($pdo);
+// $cde = new Command($pdo);
+
+// -------- New Version
+try {
+    // On initialise l'objet Command chargé d'exécuter les commandes de l'utilisateur
+    $cde = new Command();
+} catch (Exception $e) {
+    die ("Une erreur est survenue lors de l'initialisation de la Command : " . $e->getMessage());
+}
 
 // On attend qu'une commande soit tapée au clavier
 while (true) {
