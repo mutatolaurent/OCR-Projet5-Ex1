@@ -44,97 +44,97 @@ while (true) {
         // On vérifie que le format de commande est conforme à celui attendu
         $input = InputCheck::parseCommand($line);
 
-        // La commande est conforme
-        if ($input) {
-
-            // On récupère la commande    
-            $command = $input['command'];
-
-            // On récupère les arguments de la commande
-            $args = $input['args'];
-
-            // En fonction de la commande, on exécute le traitement approprié
-            switch ($command) {
-            
-                case 'help':
-
-                    $cde->help();
-                    break;
-
-                case 'list':
-
-                    $cde->list();
-                    break;
-
-                case 'create':
-
-                    // On vérifie que le nombre d'argument est conforme
-                    // On vérifie que le format de l'email est valide
-                    // On vérifie que le format du numéro de téléphone est valide
-                    $data = InputCheck::parseAndValidateCreate($args,$command);
-                    
-                    // On crée un objet Contact 
-                    $contact = new Contact();
-                    $contact->setName($data['name']);
-                    $contact->setEmail($data['email']);
-                    $contact->setPhoneNumber($data['phone_number']);
-
-                    // On insert le nouveau contact en BD
-                    $cde->create($contact);
-
-                    break;
-
-                case 'modify':
-
-                    // On vérifie que le nombre d'argument est conforme
-                    // On vérifie que le premier argument est bien numérique
-                    // On vérifie que le format de l'email est valide
-                    // On vérifie que le format du numéro de téléphone est valide
-                    $data = InputCheck::parseAndValidateModify($args,$command);
-                    
-                    // On crée un objet Contact 
-                    $contact = new Contact();
-                    $contact->setId($data['id']);
-                    $contact->setName($data['name']);
-                    $contact->setEmail($data['email']);
-                    $contact->setPhoneNumber($data['phone_number']);
-
-                    // On applique la modification en BD
-                    $cde->modify($contact);
-
-                    break;
-
-                case 'detail':
-
-                    // On vérifie que le premier argument est bien un numérique
-                    $id = InputCheck::parseId($args,$command);
-
-                    // On va chercher le contact associé à l'ID et on l'affiche
-                    $cde->detail($id);
-
-                    break;
-
-                case 'delete':
-
-                    // On vérifie que le premier argument est bien un numérique
-                    $id = InputCheck::parseId($args,$command);
-
-                    // On supprime le contact correspondant à l'ID
-                    $cde->delete($id);
-
-                    break;
-
-                case 'quit':
-                    echo "Au revoir !" . PHP_EOL;
-                    exit;
-
-                default:
-                    echo "Commande non traitée. Tapez 'help' pour voir la liste." . PHP_EOL. PHP_EOL;
-                    break;
-            }
-        } else {
+        // La commande est non conforme
+        if (!$input) {
             echo "Commande invalide. Tapez 'help' pour voir la liste." . PHP_EOL. PHP_EOL;
+            continue;
         }
+        
+        // La commande est conforme, on récupère la commande    
+        $command = $input['command'];
+
+        // On récupère les arguments de la commande
+        $args = $input['args'];
+
+        // En fonction de la commande, on exécute le traitement approprié
+        switch ($command) {
+            
+            case 'help':
+
+                $cde->help();
+                break;
+
+            case 'list':
+
+                $cde->list();
+                break;
+
+            case 'create':
+
+                // On vérifie que le nombre d'argument est conforme
+                // On vérifie que le format de l'email est valide
+                // On vérifie que le format du numéro de téléphone est valide
+                $data = InputCheck::parseAndValidateCreate($args,$command);
+                    
+                // On crée un objet Contact 
+                $contact = new Contact();
+                $contact->setName($data['name']);
+                $contact->setEmail($data['email']);
+                $contact->setPhoneNumber($data['phone_number']);
+
+                // On insert le nouveau contact en BD
+                $cde->create($contact);
+
+                break;
+
+            case 'modify':
+
+                // On vérifie que le nombre d'argument est conforme
+                // On vérifie que le premier argument est bien numérique
+                // On vérifie que le format de l'email est valide
+                // On vérifie que le format du numéro de téléphone est valide
+                $data = InputCheck::parseAndValidateModify($args,$command);
+                    
+                // On crée un objet Contact 
+                $contact = new Contact();
+                $contact->setId($data['id']);
+                $contact->setName($data['name']);
+                $contact->setEmail($data['email']);
+                $contact->setPhoneNumber($data['phone_number']);
+
+                // On applique la modification en BD
+                $cde->modify($contact);
+
+                break;
+
+            case 'detail':
+
+                // On vérifie que le premier argument est bien un numérique
+                $id = InputCheck::parseId($args,$command);
+
+                // On va chercher le contact associé à l'ID et on l'affiche
+                $cde->detail($id);
+
+                break;
+
+            case 'delete':
+
+                // On vérifie que le premier argument est bien un numérique
+                $id = InputCheck::parseId($args,$command);
+
+                // On supprime le contact correspondant à l'ID
+                $cde->delete($id);
+
+                break;
+
+            case 'quit':
+                echo "Au revoir !" . PHP_EOL;
+                exit;
+
+            default:
+                echo "Commande non traitée. Tapez 'help' pour voir la liste." . PHP_EOL. PHP_EOL;
+                break;
+            }
 
     } catch (\Exception $e) {
 
@@ -143,6 +143,3 @@ while (true) {
     }
 
 }
-
-
-
