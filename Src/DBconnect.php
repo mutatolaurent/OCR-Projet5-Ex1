@@ -8,12 +8,12 @@ class DBConnect
     private ?\PDO $pdo = null;
 
     // Configuration de la base de données
-    private string $host = 'localhost';
-    private string $port = '3306';
-    private string $dbName = 'carnet';
-    private string $user = 'root';
-    private string $password = '';
-    private string $charset ='utf8mb4';
+    private string $host = DB_HOST;
+    private string $port = DB_PORT;
+    private string $dbName = DB_NAME;
+    private string $user = DB_USER;
+    private string $password = DB_PASSWORD;
+    private string $charset = DB_CHARSET;
 
     /**
      * Retourne l'objet PDO instancié.

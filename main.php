@@ -13,6 +13,9 @@ spl_autoload_register(static function(string $fqcn) {
     require_once($path);
 });
 
+// Initialisation de la configuration de la base de données
+require_once 'configDB.php';
+
 use Src\InputCheck;     // Classe d'analyse et de validation des entrées utilisateur
 use Src\Command;        // Classe de gestion des commandes utilisateur  
 use Src\DBConnect;      // Classe de gestion de la connexion à la base de données
