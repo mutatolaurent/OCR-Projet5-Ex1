@@ -30,7 +30,7 @@ Notes d'implémentation
 
 - Tous les fichiers PHP sources sont dans le namespace `Src`; les références à la classe PDO utilisent le namespace global (préfixe `\PDO`).
 - Le projet attend une base MySQL `carnet` (configurable dans `DBconnect.php`).
-- Créer, à la racine, un fichier configDB.php avec la definition des constantes DB_NAME, DB_HOST, DB_PORT, DB_USER et DB_CHARSET nécessaire à la classe DBconnect pour se connecter à la DB. Exemple :
+- Créer, à la racine, un fichier `configDB.php` avec la definition des constantes DB_NAME, DB_HOST, DB_PORT, DB_USER et DB_CHARSET nécessaire à la classe DBconnect pour se connecter à la DB. Exemple :
 
 ```text
 <?php
