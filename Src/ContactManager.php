@@ -1,5 +1,7 @@
 <?php
 
+namespace Src;
+
 /**
  * Classe ContactManager
  * * Assure la persistance des données entre les objets de la classe Contact 
@@ -10,7 +12,7 @@ class ContactManager
     /**
      * @var PDO Instance de connexion à la base de données.
      */
-    private PDO $pdo;
+    private \PDO $pdo;
 
     // ------------ OLD VERSION : AVEC INJECTION DE DEPENDANCE DE LA CONNEXION PDO ------------
     /**
@@ -55,7 +57,7 @@ class ContactManager
         // On demande à PDO de créer des objets 'Contact'
         // PDO va automatiquement remplir les propriétés privées 
         // dont les noms correspondent aux colonnes de la BDD !
-        return $statement->fetchAll(PDO::FETCH_CLASS, Contact::class);
+        return $statement->fetchAll(\PDO::FETCH_CLASS, Contact::class);
         
     }
 
@@ -77,7 +79,7 @@ class ContactManager
         // On configure le mode de récupération pour cette requête précise
         // . PDO::FETCH_CLASS = chaque ligne de résultat doit être une nouvelle instance (un objet) d'une classe
         // . PDO::FETCH_PROPS_LATE = PDO appelle d'abord le constructeur (avec des arguments vides ou par défaut), puis il injecte les valeurs de la base de données dans les propriétés.
-        $statement->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, Contact::class);
+        $statement->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, Contact::class);
 
         // On récupère le résultat
         $contact = $statement->fetch();

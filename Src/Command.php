@@ -1,5 +1,7 @@
 <?php
 
+namespace Src;
+
 /**
  * Classe Command
  * Cette classe fait office de Contrôleur pour l'application CLI.
@@ -57,7 +59,7 @@ class Command
                 echo $contact . PHP_EOL;
             }
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             echo "[Command->list] Une erreur est survenue sur une requête BD: " . $e->getMessage(). PHP_EOL. PHP_EOL;
         }
     }
@@ -84,7 +86,7 @@ class Command
                 echo PHP_EOL."Désolé ! Aucun contact trouvé avec l'ID $id." . PHP_EOL. PHP_EOL;
             }   
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             echo "[Command->detail] Une erreur est survenue sur une requête BD: " . $e->getMessage(). PHP_EOL. PHP_EOL;
         }
     }
@@ -123,7 +125,7 @@ class Command
                 echo "[Command->create] Echec de l'insertion d'un nouveau contact". PHP_EOL. PHP_EOL;
             }
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             echo "[Command->create] Une erreur est survenue sur une requête BD: " . $e->getMessage(). PHP_EOL. PHP_EOL;
         }
 
@@ -151,7 +153,7 @@ class Command
                 echo "Désolé ! Aucun contact trouvé avec l'ID $id." . PHP_EOL. PHP_EOL;
             }   
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             echo "[Command->delete] Une erreur est survenue sur une requête BD: " . $e->getMessage(). PHP_EOL. PHP_EOL;
         }
     }
@@ -192,7 +194,7 @@ class Command
                 echo PHP_EOL."[Command->modify] Echec modification ou aucun contact trouvé avec cet ID ".$contact->getId(). PHP_EOL. PHP_EOL;
             }   
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             echo PHP_EOL."[Command->modify] Une erreur est survenue sur une requête BD: " . $e->getMessage(). PHP_EOL. PHP_EOL;
         }
     }

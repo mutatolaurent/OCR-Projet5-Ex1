@@ -1,5 +1,7 @@
 <?php
 
+namespace Src;
+
 class Contact
 {
     private ?int $id = null;

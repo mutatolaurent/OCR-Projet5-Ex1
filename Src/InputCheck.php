@@ -1,5 +1,7 @@
 <?php
 
+namespace Src;
+
 /**
  * Classe InputCheck
  * Fournit des outils statiques pour analyser, nettoyer et valider 
@@ -43,7 +45,7 @@ class InputCheck
         if (!filter_var($email, FILTER_VALIDATE_EMAIL))
         {
             // return false;
-            throw new Exception("Erreur : [$command] attend une adresse email valide.");
+            throw new \Exception("Erreur : [$command] attend une adresse email valide.");
         }
 
         return $email;
@@ -67,7 +69,7 @@ class InputCheck
         if (!preg_match($pattern, $phone_number)) 
         {
             // return false;
-            throw new Exception("Erreur : [$command] attend un numéro de téléphone valide (10 chiffres).");
+            throw new \Exception("Erreur : [$command] attend un numéro de téléphone valide (10 chiffres).");
         }
 
         // Nettoyage : on ne garde que les chiffres pour la base de données
@@ -88,7 +90,7 @@ class InputCheck
         $pattern = '/^([^,]+),\s*([^,]+),\s*([^,]+)$/';
 
         if (!preg_match($pattern, trim($args), $matches)) {
-            throw new Exception("Erreur : [create] attend 3 paramètres (Nom, Email, Tel) séparés par des virgules");
+            throw new \Exception("Erreur : [create] attend 3 paramètres (Nom, Email, Tel) séparés par des virgules");
         }
 
         // On appelle nos méthodes spécifiques
@@ -110,7 +112,7 @@ class InputCheck
     public static function parseId(string $args, string $command): int
     {
         if (!preg_match('/^(\d+)$/', trim($args))) {
-            throw new Exception("Erreur : [$command] L'identifiant doit être un nombre entier. (Exemple $command 89).");
+            throw new \Exception("Erreur : [$command] L'identifiant doit être un nombre entier. (Exemple $command 89).");
         }
         return (int)$args;
     }
@@ -129,7 +131,7 @@ class InputCheck
         $pattern = '/^([^,]+),\s*([^,]+),\s*([^,]+),\s*([^,]+)$/';
 
         if (!preg_match($pattern, trim($args), $matches)) {
-            throw new Exception("Erreur : [modify] attend 4 paramètres (Id, Nom, Email, Tel) séparés par des virgules");
+            throw new \Exception("Erreur : [modify] attend 4 paramètres (Id, Nom, Email, Tel) séparés par des virgules");
         }
 
         // On appelle nos méthodes spécifiques
