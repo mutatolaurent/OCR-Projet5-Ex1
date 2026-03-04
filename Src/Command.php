@@ -11,19 +11,6 @@ namespace Src;
 class Command 
 {
     
-    // ------------ OLD VERSION : AVEC INJECTION DE DEPENDANCE DE LA CONNEXION PDO ------------
-    /**
-     * Constructeur de la classe Command.
-     * Utilise l'injection de dépendance pour récupérer la connexion PDO.
-     *
-     * @param PDO $pdo Connexion active à la base de données.
-     */
-    // public function __construct(PDO $pdo)
-    // {
-    //     $this->pdo = $pdo;
-    // }
-
-    // ------------ NEW VERSION : SANS INJECTION DE DEPENDANCE, LE MANAGER GERE LUI-MEME SA CONNEXION ------------
     /**
      * @var ContactManager Instance du manager de contacts pour les opérations CRUD.
      */
